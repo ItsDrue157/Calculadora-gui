@@ -48,13 +48,14 @@ def calcular_operacao(operacao):
             equacao.set(resultado)
             adicionar_no_db(expression, resultado)
             expression = resultado
-    except:
+    except Exception as e:
         equacao.set("Erro")
         expression = ""
+        print(f"Erro: {e}")
 
 def pegar_resultado():
     valor = expression_field.get()
-    
+    print(valor)
 
 def adicionar_no_db(valor, resultado):
     if os.path.exists('banco_de_dados.sql'):
@@ -67,6 +68,10 @@ def adicionar_no_db(valor, resultado):
         conn.commit()
         conn.close()
 
+def press(num):
+    global expression
+    expression = expression + str(num)
+    equacao.set(expression)
 
 if __name__ == "__main__":
     janela = Tk()
@@ -122,7 +127,7 @@ if __name__ == "__main__":
     menos = Button(janela, text=' - ', fg='black', bg='white', command=lambda: press('-'), height=1, width=7)
     menos.grid(row=2, column=4)
     
-    igual = Button(janela, text=' = ', fg='black', bg='white', command=lambda: calcular_operacao("igual") and pegar_resultado(), height=1, width=7)
+    igual = Button(janela, text=' = ', fg='black', bg='white', command=lambda: [calcular_operacao("igual"), pegar_resultado()], height=1, width=7)
     igual.grid(row=1, column=4)
     
     # Dividir
@@ -136,16 +141,6 @@ if __name__ == "__main__":
     # Botão para pegar o resultado do campo de expressão e imprimir no console
     pegar_resultado_button = Button(janela, text='Debug', fg='black', bg='white', command=pegar_resultado, height=1, width=7)
     pegar_resultado_button.grid(row=4, column=4)
-
-    def press(num):
-        global expression
-        expression = expression + str(num)
-        equacao.set(expression)
-
-    def clear():
-        global expression
-        expression = ""
-        equacao.set("")
 
     # Manter a janela aberta
     janela.mainloop()
