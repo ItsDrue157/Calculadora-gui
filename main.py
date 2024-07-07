@@ -2,6 +2,7 @@ from tkinter import *
 import sqlite3
 import os
 global resultado
+global expression_debug
 #criando um banco de dados
 def CriarDB():
     conn = sqlite3.connect('banco_de_dados.sql')
@@ -36,6 +37,10 @@ def adicionar(num):
     global expression
     expression = expression + str(num)
     equacao.set(expression)
+    
+    
+    
+    
 #op de calcular
 
 def calcular_operacao(operacao):
@@ -67,7 +72,9 @@ def adicionar_o_db(expression, resultado):
         conn.commit()
         conn.close()
 
-
+def pegarresultadodebug():
+    expression_debug = expression
+    print(expression_debug)
 
 
 if __name__ == "__main__":
@@ -125,7 +132,8 @@ if __name__ == "__main__":
     menos.grid(row=2, column=4)
     
     #calcular
-    igual = Button(janela, text=' = ', fg='black', bg='white', command=lambda: calcular_operacao("igual"), height=1, width=7)
+    igual = Button(janela, text=' = ', fg='black', bg='white', command=lambda: calcular_operacao("igual"),COMMAND=pegarresultadodebug(),  height=1, width=7)
+    
     igual.grid(row=1, column=4,)
     
     
